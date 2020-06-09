@@ -15,5 +15,8 @@
   "bugs": {
     "url": "https://github.com/Tarcisio20/bot-video-youtube/issues"
   },
-  "homepage": "https://github.com/Tarcisio20/bot-video-youtube#readme"
+  "homepage": "https://github.com/Tarcisio20/bot-video-youtube#readme",
+  "dependencies": {
+    "readline-sync": "^1.4.10"
+  }
 }
