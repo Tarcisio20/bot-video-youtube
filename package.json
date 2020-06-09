@@ -1,0 +1,19 @@
+{
+  "name": "bot-video-youtube",
+  "version": "1.0.0",
+  "description": "\"Projeto open source para fazer videos automatizados\"",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Tarcisio20/bot-video-youtube.git"
+  },
+  "author": "Tarcisio Silva",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/Tarcisio20/bot-video-youtube/issues"
+  },
+  "homepage": "https://github.com/Tarcisio20/bot-video-youtube#readme"
+}
