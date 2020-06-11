@@ -5,19 +5,24 @@ const sentenceBoudaryDetection = require('sbd')
 
 const NaturalLanguageUnderstandingV1 = require('ibm-watson/natural-language-understanding/v1')
 const { IamAuthenticator } = require('ibm-watson/auth')
-var nlu = new  NaturalLanguageUnderstandingV1({
+const nlu = new  NaturalLanguageUnderstandingV1({
     authenticator: new IamAuthenticator({ apikey: watsonApiKey.apikey }),
     version: '2018-04-05',
     url: 'https://gateway.watsonplatform.net/natural-language-understanding/api/'
 })
 
-async function robot(content){
+const state = require('./state.js')
+
+async function robot(){
+    const content = state.load()
+
     await fetchContentFromWikipedia(content)
     sanitizeContent(content)
     breakContentInToSentences(content)
     limitMaximumSentences(content)
     await fetchKeywordsOfAllSentences(content)
 
+    state.save(content)
 
    async function fetchContentFromWikipedia(content){
     const algorithmiaAuthenticated = algorithmia(algorithmiaApiKey)
@@ -79,38 +84,7 @@ async function robot(content){
   }
 
 
-  // async function fetchKeywordsOfAllSentences(content){
-      //  console.log(content.sentences)
-        //for(i = 0; i > content.sentences.text.length; i++){
-          //  console.log(i)
-        //}
-       
-       /*let i = 0
-       for( const sentence of content.sentences ){
-            sentence.keywords = await fetchWatsonAndReturnKeywords(sentence[i].text)
-            console.log(content.sentences.text)
-            i++
-       }*/
-  // }
-
-/*
-  async function fetchWatsonAndReturnKeywords(sentence){
-        nlu.analyze({
-            text: sentence,
-            features: {
-                keywords: {}
-            }
-        }).then(response => {
-            
-            const keywords = response.keywords.map((keyword)=>{
-                return keyword.text
-            })
-            return keywords
-        }).catch(error =>{
-            throw error
-        })
-    }
-    */
+  
    async function fetchWatsonAndReturnKeywords(sentence) {
     return new Promise((resolve, reject) => {
       nlu.analyze({
