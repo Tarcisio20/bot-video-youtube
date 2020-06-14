@@ -1,3 +1,5 @@
 node_modules/
 credentials/*.json
 content.json
+content/*.png
+.DS_Store
