@@ -1,4 +1,5 @@
 const { google } = require('googleapis')
+const imageDownloader = require('image-downloader')
 const customSearch = google.customsearch('v1')
 const state = require('./state.js')
 
@@ -8,6 +9,7 @@ async function robot() {
     const content = state.load()
 
     await fetchImagesOfAllSenteces(content)
+    await downloadAllImages(content)
     state.save(content)
 
     async function fetchImagesOfAllSenteces(content){
@@ -32,6 +34,39 @@ async function robot() {
             return item.link
         })
         return imagesUrl
+    }
+
+    async function downloadAllImages(content){
+        content.dowloadedImages = []
+
+
+
+        for (let sentenceIndex =0; sentenceIndex < content.sentences.length; sentenceIndex++){
+            const images = content.sentences[sentenceIndex].images
+
+            for (let imageIndex = 0; imageIndex < images.length; imageIndex++){
+                const imageUrl = images[imageIndex]
+
+                try{
+                    if(content.dowloadedImages.includes(imageUrl)){
+                        throw new Error('Imagem já baixada!')
+                    }
+                    await downloadAndSave(imageUrl, `${sentenceIndex}-original.png`)
+                    content.dowloadedImages.push(imageUrl)
+                    console.log(`> [${sentenceIndex}][${imageIndex}] Baixou imagem com sucesso: ${imageUrl}`)
+                    break
+                }catch(error){
+                    console.log(`> [${sentenceIndex}][${imageIndex}] Erro ao baixar imagem: ${imageUrl}: ${error}`) 
+                }
+            }
+        }
+    }
+
+    async function downloadAndSave(url, fileName){
+        return imageDownloader.image({
+            url, url,
+            dest : `./content/${fileName}`
+        })
     }
 }
 
